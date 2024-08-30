@@ -12,6 +12,10 @@
 
 #include "mm/core/hash.h"
 
+namespace ImGui {
+	bool IsKeyDown(ImGuiKey key);
+	bool IsKeyJustDown(ImGuiKey key);
+}
 
 class ImGuiRenderer {
 public:
@@ -66,7 +70,7 @@ public:
 		}
 
 		template<typename T>
-		T Arg(size_t index = 0) {
+		T Arg(size_t index = 0) const {
 			void* a = nullptr;
 			if (!isFunction) {
 				a = args[index];	
@@ -95,9 +99,9 @@ public:
 				if (_event.isFunction)
 					_event.func();
 				else if (!isRender)
-					GameEventHandler(_event);
+					GameHandleEvent(_event);
 				else
-					RenderEventHandler(_event);
+					RenderHandleEvent(_event);
 				Mutex().lock();
 				(isRender ? renderEvents : events).pop_front();
 				Mutex().unlock();
@@ -105,9 +109,9 @@ public:
 		}
 	};
 
-	virtual void GameEventHandler(Event const& event_hash) {};
+	virtual void GameHandleEvent(Event const& event) {};
 	virtual void Game() {};
-	virtual void RenderEventHandler(Event const& event_hash) {};
+	virtual void RenderHandleEvent(Event const& event) {};
 	virtual void RenderInit(bool reInit) {};
 	virtual void Render() {};
 	virtual void RenderShutdown() {};

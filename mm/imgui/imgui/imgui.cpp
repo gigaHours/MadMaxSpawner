@@ -7567,11 +7567,11 @@ const char* ImGui::GetKeyName(ImGuiKey key)
 
 // Note that Dear ImGui doesn't know the meaning/semantic of ImGuiKey from 0..511: they are legacy native keycodes.
 // Consider transitioning from 'IsKeyDown(MY_ENGINE_KEY_A)' (<1.87) to IsKeyDown(ImGuiKey_A) (>= 1.87)
-bool ImGui::IsKeyDown(ImGuiKey key)
-{
-    const ImGuiKeyData* key_data = GetKeyData(key);
-    return key_data->Down;
-}
+//bool ImGui::IsKeyDown(ImGuiKey key)
+//{
+//    const ImGuiKeyData* key_data = GetKeyData(key);
+//    return key_data->Down;
+//}
 
 // t0 = previous time (e.g.: g.Time - g.IO.DeltaTime)
 // t1 = current time (e.g.: g.Time)

@@ -267,5 +267,7 @@ namespace NGraphicsEngine {
 
 
 		static CGraphicsParams& m_Params;
+
+		CMETHOD(0x140879920, 0x142AA9E20, void, SetCursor(int type), type)
 	};
 }

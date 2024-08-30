@@ -11,7 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="mm\core\avasingle.cpp" />
     <ClCompile Include="mm\hookmgr.cpp" />
+    <ClCompile Include="mm\imgui\imgui.cpp" />
     <ClCompile Include="mm\minhook\src\buffer.c" />
     <ClCompile Include="mm\minhook\src\hde\hde32.c" />
     <ClCompile Include="mm\minhook\src\hde\hde64.c" />
@@ -31,6 +33,8 @@
     <ClCompile Include="mm\imgui\imgui_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mm\core\avasingle.h" />
+    <ClInclude Include="mm\core\input.h" />
     <ClInclude Include="mm\hookmgr.h" />
     <ClInclude Include="mm\minhook\src\buffer.h" />
     <ClInclude Include="mm\minhook\src\hde\hde32.h" />
@@ -110,6 +114,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,6 +134,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
