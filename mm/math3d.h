@@ -194,6 +194,9 @@ public:
 		_44 = 1.0f;
 	}
 
+
+	CMETHODV(0x1409EA850, 0x1429BE740, CVector3f&, ToEulerXYZ())
+
 	const static matrix identity;
 };
 template<typename T>
@@ -215,8 +218,8 @@ public:
 	//CVector4f v;
 	float x, y, z, w;
 
-	CQuaternion* FromMatrix4(const CMatrix& mat);
-	CMatrix* ToMatrix4(CMatrix& mat);
+	CMETHOD(0x1409F4470, 0x1429C91A0, CQuaternion&, FromMatrix4(const CMatrix& mat), &mat);
+	CMETHOD(0x1409E1270, 0x1429B49A0, CMatrix&, ToMatrix4(CMatrix& mat), &mat);
 
 	void Set(float _x, float _y, float _z, float _w)
 	{
@@ -225,4 +228,8 @@ public:
 		y = _y;
 		z = _z;
 	}
+
+	CMETHOD(0x1409EF470, 0x1429C3D30, CQuaternion&, FromEulerXYZ(CVector3f const& euler), euler)
+
+	CMETHOD(0x1409E1BA0, 0x1429B5340, CVector3f&, operator*(CVector3f const& v), &v)
 };

@@ -13,6 +13,9 @@
 #define CMETHODV(gog, steam, type, name) type name { return HookMgr::Call<type>(ADDRESS(gog, steam), this); }
 #define SMETHODV(gog, steam, type, name) type name { return HookMgr::Call<type>(ADDRESS(gog, steam)); }
 
+#define SVARDEF(type, name) extern type& name;
+#define SVAR(gog, steam, type, name) type& name = *(type*)ADDRESS(gog, steam)
+
 #define DEFHOOK(type, name, args) type (*name##_orig)args ; \
 type name##_hook args
 

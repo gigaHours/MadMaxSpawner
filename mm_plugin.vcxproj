@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mm\core\avasingle.cpp" />
+    <ClCompile Include="mm\game\spawnsystem.cpp" />
     <ClCompile Include="mm\hookmgr.cpp" />
     <ClCompile Include="mm\imgui\imgui.cpp" />
     <ClCompile Include="mm\minhook\src\buffer.c" />
@@ -33,8 +34,17 @@
     <ClCompile Include="mm\imgui\imgui_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mm\core.h" />
     <ClInclude Include="mm\core\avasingle.h" />
     <ClInclude Include="mm\core\input.h" />
+    <ClInclude Include="mm\game\charactermanager.h" />
+    <ClInclude Include="mm\game\events.h" />
+    <ClInclude Include="mm\game\go\character.h" />
+    <ClInclude Include="mm\game\go\damageable.h" />
+    <ClInclude Include="mm\game\go\go.h" />
+    <ClInclude Include="mm\game\go\pfxgo.h" />
+    <ClInclude Include="mm\game\go\physgo.h" />
+    <ClInclude Include="mm\game\spawnsystem.h" />
     <ClInclude Include="mm\hookmgr.h" />
     <ClInclude Include="mm\minhook\src\buffer.h" />
     <ClInclude Include="mm\minhook\src\hde\hde32.h" />
@@ -47,6 +57,7 @@
     <ClInclude Include="mm\core\graphics\graphicsengine.h" />
     <ClInclude Include="mm\core\hash.h" />
     <ClInclude Include="mm\math3d.h" />
+    <ClInclude Include="mm\mm.h" />
     <ClInclude Include="mm\std.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="mm\imgui\imgui.h" />
@@ -60,6 +71,9 @@
     <ClInclude Include="mm\imgui\imgui\imstb_rectpack.h" />
     <ClInclude Include="mm\imgui\imgui\imstb_textedit.h" />
     <ClInclude Include="mm\imgui\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -146,5 +160,13 @@
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\boost.1.86.0\build\boost.targets" Condition="Exists('packages\boost.1.86.0\build\boost.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\boost.1.86.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\boost.1.86.0\build\boost.targets'))" />
+  </Target>
 </Project>
