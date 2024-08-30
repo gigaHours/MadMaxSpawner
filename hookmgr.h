@@ -12,6 +12,10 @@
 #define SMETHOD(gog, steam, type, name, ...) type name { return HookMgr::Call<type>(ADDRESS(gog, steam), __VA_ARGS__); }
 #define CMETHODV(gog, steam, type, name) type name { return HookMgr::Call<type>(ADDRESS(gog, steam), this); }
 #define SMETHODV(gog, steam, type, name) type name { return HookMgr::Call<type>(ADDRESS(gog, steam)); }
+
+#define DEFHOOK(type, name, args) type (*name##_orig)args ; \
+type name##_hook args
+
 class HookMgr
 {
 public:
@@ -30,6 +34,9 @@ public:
 	template<typename A, typename T, typename TO>
 	static void Install(A addr, T func, TO& orig)
 	{
+		if ((uintptr_t)addr == 0)
+			return;
+
 		MH_CreateHook((LPVOID)addr, (LPVOID)func, (LPVOID*)&orig);
 		MH_EnableHook((LPVOID)addr);
 	}
@@ -37,6 +44,9 @@ public:
 	template<typename T>
 	static void Install(uintptr_t addr, T func)
 	{
+		if ((uintptr_t)addr == 0)
+			return;
+
 		MH_CreateHook((LPVOID)addr, (LPVOID)func, (LPVOID*)nullptr);
 		MH_EnableHook((LPVOID)addr);
 	}

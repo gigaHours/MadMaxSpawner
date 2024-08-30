@@ -1,14 +1,18 @@
 #pragma comment(lib, "d3d11.lib")
 
 //#include <mm/core/graphicsengine/graphicsengine.h>
+#include "plugin.h"
 #include "mm/graphicsengine.h"
 #include "imgui_detour_dx11.h"
-#include "hookmgr.h"
 
 ImGui::DetourDX11::present  ImGui::DetourDX11::p_present = 0;
 ImGui::DetourDX11::present	ImGui::DetourDX11::p_present_target = 0;
 
-WNDPROC ImGui::DetourDX11::oWndProc = 0;
+std::function<void(bool)> ImGui::DetourDX11::_onInit;
+std::function<void()> ImGui::DetourDX11::_onRender;
+std::function<void()> ImGui::DetourDX11::_onShutdown;
+
+WNDPROC ImGui::DetourDX11::oWndProc = nullptr;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -19,28 +23,25 @@ LRESULT __stdcall ImGui::DetourDX11::WndProc(const HWND hWnd, UINT uMsg, WPARAM 
 	return CallWindowProc(oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-void ImGui::DetourDX11::DetourPresent(IDXGISwapChain* m_SwapChain, ID3D11Device* m_D3DDevice)
-{
-}
-
-void (*Graphics__Flip_orig)(Graphics::HDevice_t* device);
-void Graphics__Flip_hook(Graphics::HDevice_t* device) {
+DEFHOOK(void, Graphics__Flip, (Graphics::HDevice_t* device)) {
 
 	if (device->m_Context->m_Mutex)
 		EnterCriticalSection((LPCRITICAL_SECTION)device->m_Context->m_Mutex);
 
+	if (ImGui::GetCurrentContext()) {
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
 
+		ImGui::NewFrame();
 
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
+		if (ImGui::DetourDX11::_onRender)
+			ImGui::DetourDX11::_onRender();
 
-	ImGui::NewFrame();
+		ImGui::EndFrame();
+		ImGui::Render();
 
-	
-	ImGui::EndFrame();
-	ImGui::Render();
-
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
 
 	if (device->m_Context->m_Mutex)
 		LeaveCriticalSection((LPCRITICAL_SECTION)device->m_Context->m_Mutex);
@@ -48,45 +49,55 @@ void Graphics__Flip_hook(Graphics::HDevice_t* device) {
 	return Graphics__Flip_orig(device);
 }
 
-void (*DestroyRenderSetups_orig)(NGraphicsEngine::CGraphicsEngine* thiz);
-void DestroyRenderSetups_hook(NGraphicsEngine::CGraphicsEngine* thiz) {
+DEFHOOK(void, DestroyRenderSetups, (NGraphicsEngine::CGraphicsEngine* thiz)) {
 
-	ImGui_ImplWin32_Shutdown();
+	if (ImGui::DetourDX11::_onShutdown)
+		ImGui::DetourDX11::_onShutdown();
+
 	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
 
 	return DestroyRenderSetups_orig(thiz);
 }
 
-void(*CreateRenderSetups_orig)(NGraphicsEngine::CGraphicsEngine* thiz);
-void CreateRenderSetups_hook(NGraphicsEngine::CGraphicsEngine* thiz) {
-
+DEFHOOK(void, CreateRenderSetups, (NGraphicsEngine::CGraphicsEngine* thiz)) {
 	CreateRenderSetups_orig(thiz);
 
-	static bool init1 = false;
-	static bool init2 = false;
+	static bool reInit = false;
 
 	DXGI_SWAP_CHAIN_DESC sd;
 	thiz->m_GraphicsDevice->m_SwapChain->GetDesc(&sd);
 
-	if (!init1) {
-
+	bool needCallInit = false;
+	if (!ImGui::GetCurrentContext()) {
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-		ImGui::DetourDX11::oWndProc = (WNDPROC)SetWindowLongPtr(sd.OutputWindow, GWLP_WNDPROC, (LONG_PTR)ImGui::DetourDX11::WndProc);
-		init1 = true;
+		if(!ImGui::DetourDX11::oWndProc)
+			ImGui::DetourDX11::oWndProc = (WNDPROC)SetWindowLongPtr(sd.OutputWindow, GWLP_WNDPROC, (LONG_PTR)ImGui::DetourDX11::WndProc);
+		needCallInit = true;
 	}
 
-	
 	ImGui_ImplWin32_Init(sd.OutputWindow);
 	ImGui_ImplDX11_Init(thiz->m_GraphicsDevice->m_D3DDevice, thiz->m_GraphicsDevice->m_Context->m_Context);
+
+	if (needCallInit && ImGui::DetourDX11::_onInit) {
+		ImGui::DetourDX11::_onInit(reInit);
+		reInit = true;
+	}
 }
 
-void ImGui::DetourDX11::Install(uintptr_t flipAddr, uintptr_t createRender, uintptr_t destroyRender)
+void ImGui::DetourDX11::Install(uintptr_t flipAddr, uintptr_t createRender, uintptr_t destroyRender,
+	std::function<void(bool)> onInit,
+	std::function<void()> onRender,
+	std::function<void()> onShutdown)
 {
-	//GetPresentPointer();
+	_onInit = onInit;
+	_onRender = onRender;
+	_onShutdown = onShutdown;
 
-	HookMgr::Install(flipAddr, Graphics__Flip_hook, Graphics__Flip_orig);
-	HookMgr::Install(createRender, CreateRenderSetups_hook, CreateRenderSetups_orig);
-	HookMgr::Install(destroyRender, DestroyRenderSetups_hook, DestroyRenderSetups_orig);
+	HookMgr::Install(flipAddr, Graphics__Flip_hook, Graphics__Flip_orig); // ?Flip@Graphics@@YA?AW4EResult@1@PEAUHDevice_t@1@@Z
+	HookMgr::Install(createRender, CreateRenderSetups_hook, CreateRenderSetups_orig); // ?CreateRenderSetups@CGraphicsEngine@NGraphicsEngine@@AEAA_NAEBUSDeviceInfo@Graphics@@@Z
+	HookMgr::Install(destroyRender, DestroyRenderSetups_hook, DestroyRenderSetups_orig); // ?DestroyRenderSetups@CGraphicsEngine@NGraphicsEngine@@AEAAXXZ
 }

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "hookmgr.h"
+#include "plugin.h"
 #include <corecrt_math.h>
 
 class CVector2f
