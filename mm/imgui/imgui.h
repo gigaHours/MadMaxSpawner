@@ -5,12 +5,12 @@
 #include <list>
 #include <vector>
 
-#include "vendor/imgui/imgui.h"
-#include "vendor/imgui/imgui_impl_win32.h"
-#include "vendor/imgui/imgui_impl_dx11.h"
-#include "vendor/imgui/imgui_detour_dx11.h"
+#include "mm/imgui/imgui/imgui.h"
+#include "mm/imgui/imgui/imgui_impl_win32.h"
+#include "mm/imgui/imgui/imgui_impl_dx11.h"
+#include "mm/imgui/imgui/imgui_detour_dx11.h"
 
-#include "mm/hash.h"
+#include "mm/core/hash.h"
 
 
 class ImGuiRenderer {

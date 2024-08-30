@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <Windows.h>
-#include "hookmgr.h"
+#include "mm/hookmgr.h"
 
 #define DLLATTATCH BOOL APIENTRY DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved) \
 { \

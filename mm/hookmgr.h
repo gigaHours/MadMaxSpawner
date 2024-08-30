@@ -1,6 +1,6 @@
 #pragma once
 
-#include "minhook/include/MinHook.h"
+#include "mm/minhook/include/MinHook.h"
 
 // MadMax.exe 1.0.3.0
 #define STEAM_BASE_OFFS (0x0) // 0x1447400 ???
