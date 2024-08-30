@@ -57,13 +57,24 @@ namespace Input {
 	};
 }
 
-class CDeviceManager
+class CDeviceManager_AVA // STEAM 0x160 - AVA 0x130
 {
 public:
 
 	Input::CInputDeviceManager* GetInputManager() { return &m_InputManager; }
 
 	char _unk000[0x70];
+	Input::CInputDeviceManager m_InputManager;
+
+};
+
+class CDeviceManager_STEAM // STEAM 0x160 - AVA 0x130
+{
+public:
+
+	Input::CInputDeviceManager* GetInputManager() { return &m_InputManager; }
+
+	char _unk000[0xA0];
 	Input::CInputDeviceManager m_InputManager;
 
 };

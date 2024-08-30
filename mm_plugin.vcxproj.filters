@@ -78,6 +78,9 @@
     <ClCompile Include="mm\game\spawnsystem.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="mm\core\graphics\graphicsengine.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mm\hookmgr.h">

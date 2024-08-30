@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mm\core\avasingle.cpp" />
+    <ClCompile Include="mm\core\graphics\graphicsengine.cpp" />
     <ClCompile Include="mm\game\spawnsystem.cpp" />
     <ClCompile Include="mm\hookmgr.cpp" />
     <ClCompile Include="mm\imgui\imgui.cpp" />

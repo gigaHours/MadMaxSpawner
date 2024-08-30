@@ -535,8 +535,8 @@ public:
 
 	void GameHandleEvent(Event const& _event) override {
 		if (_event.hash == HASHSTR("focus")) {
-			CAvaSingle<CDeviceManager>::Instance->GetInputManager()->SetInFocus(!_event.Arg<bool>(0));
-			CAvaSingle<NGraphicsEngine::CGraphicsEngine>::Instance->SetCursor(_event.Arg<bool>(0) ? 0 : -1);
+			//CAvaSingleInstance_EXE(CDeviceManager, ->GetInputManager()->SetInFocus(!_event.Arg<bool>(0)));
+			//CAvaSingle<NGraphicsEngine::CGraphicsEngine>::Instance->SetCursor(_event.Arg<bool>(0) ? 0 : -1);
 		}
 	};
 
@@ -547,6 +547,9 @@ public:
 	std::string selected_item2 = "";
 	char input_buffer[256] = { 0 };
 	void Render() override {
+
+
+		Log("Render start");
 
 		if (ImGui::IsKeyJustDown(ImGuiKey_Slash)) {
 			show = !show;
@@ -651,6 +654,8 @@ public:
 		}
 
 		ImGui::End();
+
+		Log("Render end");
 	}
 };
 
