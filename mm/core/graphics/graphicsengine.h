@@ -268,7 +268,7 @@ namespace NGraphicsEngine {
 
 		static CGraphicsParams& m_Params;
 
-		//CMETHOD(0x140879920, 0x142AA9E20, void, SetCursor(int type), type) // 0x142AA9E20 - runtime obfuscated function with stack checker
+		//CMETHOD(0x140879920, 0x142AA9E20, void, SetCursor(int type), type)
 		void SetCursor(int type) {
 			if (type != m_ActiveCursor) {
 				m_ActiveCursor = type;

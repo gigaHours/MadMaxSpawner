@@ -7,6 +7,7 @@
 
 #include "mm/game/spawnsystem.h"
 #include "mm/game/charactermanager.h"
+#include "mm/game/game.h"
 
 const char* exported_ext = ".ee";
 const char* empty_vehicle[] = // id - -5
@@ -530,7 +531,12 @@ public:
 	}
 
 	void Game() override {
+		if (CGameState::m_InMainMenu || CGameState::m_State != CGameState::E_GAME_RUN || IsGuiOccludingMainDraw()) {
+			SendRenderEvent([this]() { force_hide = true; });
+			return;
+		}
 
+		SendRenderEvent([this]() { force_hide = false; });
 	}
 
 	void GameHandleEvent(Event const& _event) override {
@@ -540,6 +546,7 @@ public:
 		}
 	};
 
+	bool force_hide = true;
 	bool show = false;
 	bool show_list1 = false;
 	bool show_list2 = false;
@@ -547,6 +554,9 @@ public:
 	std::string selected_item2 = "";
 	char input_buffer[256] = { 0 };
 	void Render() override {
+
+		if (force_hide)
+			return;
 
 		if (ImGui::IsKeyJustDown(ImGuiKey_Slash)) {
 			show = !show;

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="mm\core\avasingle.cpp" />
     <ClCompile Include="mm\core\graphics\graphicsengine.cpp" />
+    <ClCompile Include="mm\game\game.cpp" />
     <ClCompile Include="mm\game\spawnsystem.cpp" />
     <ClCompile Include="mm\hookmgr.cpp" />
     <ClCompile Include="mm\imgui\imgui.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="mm\core\input.h" />
     <ClInclude Include="mm\game\charactermanager.h" />
     <ClInclude Include="mm\game\events.h" />
+    <ClInclude Include="mm\game\game.h" />
     <ClInclude Include="mm\game\go\character.h" />
     <ClInclude Include="mm\game\go\damageable.h" />
     <ClInclude Include="mm\game\go\go.h" />
@@ -114,12 +116,14 @@
     <OutDir>..\..\..\Program Files %28x86%29\Steam\steamapps\common\Mad Max\scripts</OutDir>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);.\</IncludePath>
+    <TargetName>mm_spawner</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetExt>.asi</TargetExt>
     <OutDir>..\..\..\Program Files %28x86%29\Steam\steamapps\common\Mad Max\scripts</OutDir>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);.\</IncludePath>
+    <TargetName>mm_spawner</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
