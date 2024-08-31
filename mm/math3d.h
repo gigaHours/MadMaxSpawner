@@ -231,5 +231,9 @@ public:
 
 	CMETHOD(0x1409EF470, 0x1429C3D30, CQuaternion&, FromEulerXYZ(CVector3f const& euler), euler)
 
-	CMETHOD(0x1409E1BA0, 0x1429B5340, CVector3f&, operator*(CVector3f const& v), &v)
+	CVector3f& operator*(CVector3f const& v) {
+		CVector3f result;
+		CCALL(0x1409E1BA0, 0x1429B5340, CVector3f&, &result, &v);
+		return result;
+	}
 };

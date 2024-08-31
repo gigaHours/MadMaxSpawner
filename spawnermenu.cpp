@@ -599,7 +599,7 @@ public:
 				if (!CAvaSingle<CCharacterManager>::Instance->GetPlayerCharacter())
 					return;
 
-				CHashString spawnId = SpawnSystemGetNewSpawnId().m_Hash;
+				CHashString spawnId = SpawnSystemGetNewSpawnId(spawnId);
 				auto newInfo = SSpawnInstanceInfo::New();
 				newInfo->m_SpawnId.m_Hash = spawnId.m_Hash;
 				newInfo->m_SpawnPatchId.m_Hash = spawnId.m_Hash;

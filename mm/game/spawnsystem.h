@@ -165,7 +165,7 @@ public:
 };
 //static_assert(sizeof(CSpawnedEntityHandler) == 0x1A8, "");
 
-inline SMETHODV(0x1405099D0, 0x14212B750, CHashString&, SpawnSystemGetNewSpawnId())
+inline SMETHOD(0x1405099D0, 0x14212B750, CHashString&, SpawnSystemGetNewSpawnId(CHashString const& result), &result)
 inline SMETHOD(0x140530400, 0x142157080, void, SpawnSystemDespawn(CHashString const& id), &id)
 inline SMETHOD(0x140562EB0, 0x14218D5B0, size_t, SpawnSystemSpawn(SSpawnInstanceInfo* info, CMatrix* mat), info, mat)
 
