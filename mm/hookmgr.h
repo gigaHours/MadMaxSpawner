@@ -3,10 +3,13 @@
 #include "mm/minhook/include/MinHook.h"
 
 // MadMax.exe 1.0.3.0
-#define STEAM_BASE_OFFS (0x0) // 0x1447400 ???
-#define STEAM_BASE (0x140000000)
-#define STEAM_ADDR_TO_BASE(addr) ((uintptr_t)(addr) - STEAM_BASE_OFFS)
-#define ADDRESS(gog, steam) (HookMgr::isSteam ? (STEAM_BASE_OFFS + steam) : (gog))
+
+#define ACT_EXE(gog, steam) ( (*(uint64_t*)(0x14192A150) == 0x1c3c00001bf0) ? (gog) : (steam) )
+
+//#define STEAM_BASE_OFFS (0x0) // 0x1447400 ???
+//#define STEAM_BASE (0x140000000)
+//#define STEAM_ADDR_TO_BASE(addr) ((uintptr_t)(addr) - STEAM_BASE_OFFS)
+#define ADDRESS(gog, steam) ACT_EXE(gog, steam)
 
 #define CMETHOD(gog, steam, type, name, ...) type name { return HookMgr::Call<type>(ADDRESS(gog, steam), this, __VA_ARGS__); }
 #define SMETHOD(gog, steam, type, name, ...) type name { return HookMgr::Call<type>(ADDRESS(gog, steam), __VA_ARGS__); }

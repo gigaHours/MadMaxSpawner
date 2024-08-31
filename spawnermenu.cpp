@@ -535,8 +535,8 @@ public:
 
 	void GameHandleEvent(Event const& _event) override {
 		if (_event.hash == HASHSTR("focus")) {
-			//CAvaSingleInstance_EXE(CDeviceManager, ->GetInputManager()->SetInFocus(!_event.Arg<bool>(0)));
-			//CAvaSingle<NGraphicsEngine::CGraphicsEngine>::Instance->SetCursor(_event.Arg<bool>(0) ? 0 : -1);
+			CAvaSingleInstance_EXE(CDeviceManager, ->GetInputManager()->SetInFocus(!_event.Arg<bool>(0)));
+			CAvaSingle<NGraphicsEngine::CGraphicsEngine>::Instance->SetCursor(_event.Arg<bool>(0) ? 0 : -1);
 		}
 	};
 
@@ -547,9 +547,6 @@ public:
 	std::string selected_item2 = "";
 	char input_buffer[256] = { 0 };
 	void Render() override {
-
-
-		Log("Render start");
 
 		if (ImGui::IsKeyJustDown(ImGuiKey_Slash)) {
 			show = !show;
@@ -592,7 +589,6 @@ public:
 				if (!CAvaSingle<CCharacterManager>::Instance->GetPlayerCharacter())
 					return;
 
-				
 				CHashString spawnId = SpawnSystemGetNewSpawnId().m_Hash;
 				auto newInfo = SSpawnInstanceInfo::New();
 				newInfo->m_SpawnId.m_Hash = spawnId.m_Hash;
@@ -608,11 +604,10 @@ public:
 				auto pos = Mat.Position() + (rot * CVector3f(0, 0.2, -8)); // forward
 				Mat.SetPosition(pos);
 
-				
-
 				s_SpawnSystemContext->m_UseSpawnLimits = false;
 				SpawnSystemSpawn(newInfo, &Mat);
 				SSpawnInstanceInfo::Delete(newInfo);
+
 				});
 		}
 
@@ -654,8 +649,6 @@ public:
 		}
 
 		ImGui::End();
-
-		Log("Render end");
 	}
 };
 

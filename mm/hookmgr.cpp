@@ -42,10 +42,7 @@ void Log(const char* str, ...)
 void HookMgr::Initialize() {
 	MH_Initialize();
 
-	if (*(uint64_t*)(0x14192A150) == 0x1c3c00001bf0) // RUNTIME_FUNCTION rva ?Win32CRTStartupHook@@YAHXZ rva algn_140001C3C
-		isGOG = true;
-	else
-		isSteam = true;
+	ACT_EXE(isGOG = true, isSteam = true);
 
 	if (isSteam) {
 
